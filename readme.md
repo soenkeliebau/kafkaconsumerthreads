@@ -2,7 +2,9 @@
 
 This is a small project to show certain issues I am investigating regarding the implementation of a threadpool for KafkaConsumer objects.
 
-As long as the number of threads reading from these consumers is larger than the number of consumers everything works well. If there are more consumers than threads things go wrong.
+The project implements a very simple KafkaConsumer pool that can share a number of KafkaConsumers across multiple threads, as the KafkaConsumer itself is not thread safe. Basically it is just a ConcurrentLinkedQueue of KafkaConsumers, where consumers get taken out before polling them and returned to the queue at the end once the poll is finished.
+
+As long as the number of threads reading from the pool is larger than the number of consumers everything works well. If there are more consumers than threads things go wrong.
 
 ## Example runs with 4 consumers and 3 threads
 

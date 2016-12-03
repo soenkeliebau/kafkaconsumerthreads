@@ -2,6 +2,7 @@ package com.opencore.misc;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.TopicPartition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,9 +36,9 @@ public class ConsumerThread extends Thread {
       consumer = consumers.poll();
       if (consumer != null) {
         // if consumer is null, no consumer was available at this time, skip the rest of the loop and try again
-        logger.warn(threadId + " polling from " + consumer);
+        logger.warn(threadId + " polling from " + consumer + " with subscription: " + consumer.assignment());
         long pollStartTime = System.currentTimeMillis();
-        consumer.poll(1000);
+        consumer.poll(100);
         logger.warn(threadId + " poll took " + (System.currentTimeMillis() - pollStartTime) + "ms from consumer " + consumer);
 
         // return the consumer to the pool
